@@ -160,6 +160,22 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 
 **Descrição**: O _prompt_ define a postura do LLM da OpenAI: responder somente com evidências comprovadas, citar PMIDs em cada orientação e manter o aviso clínico obrigatório. Também instrui o modelo a registrar lacunas de evidência, garantindo transparência com o usuário.
 
+### 4. Estrutura do Backend de Referência
+
+Para acelerar a implementação, o repositório inclui um backend funcional em `app/` organizado da seguinte forma:
+
+```
+app/
+├── config.py          # Carrega variáveis de ambiente (chaves do NCBI/OpenAI e link do staff)
+├── llm.py             # Summarizer baseado na API da OpenAI com fallback offline
+├── main.py            # Entrypoint FastAPI com endpoints `/health` e `/v1/query`
+├── pubmed_client.py   # Cliente para ESearch/ESummary com tratamento de timeouts
+├── schemas.py         # Modelos Pydantic compartilhados entre camadas
+└── services.py        # Orquestra consultas, síntese e escalonamento para o WhatsApp
+```
+
+Os testes unitários em `tests/` demonstram como mockar o PubMed e validar o acionamento do link de WhatsApp (`https://wa.me/5512988940100`) quando `needs_staff_review` é verdadeiro ou quando a pergunta contém termos de emergência. Execute `pytest` após instalar as dependências para garantir que a infraestrutura esteja funcionando.
+
 ## Considerações de Conformidade e Ética
 - **Disclaimers obrigatórios** em todas as telas e respostas.
 - **Gestão de consentimento** para armazenamento de dados de uso.

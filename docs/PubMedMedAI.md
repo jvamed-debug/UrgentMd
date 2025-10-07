@@ -108,6 +108,12 @@ def esearch(query: str, retmax: int = 20) -> List[str]:
     return data["esearchresult"].get("idlist", [])
 ```
 
+**Descrição**: Este módulo encapsula a chamada `ESearch` da API E-Utilities. Ele lê a chave do NCBI por variável de ambiente (qu
+ando configurada) para ampliar o limite de requisições, compõe o dicionário de parâmetros exigido pelo PubMed (banco de dados,
+ formato, quantidade de itens) e executa uma requisição HTTP `GET` com timeout definido. Após validar o status HTTP, o payload 
+JSON é convertido para Python e a função retorna somente a lista de PMIDs, preparando dados para os estágios subsequentes do flu
+xo.
+
 ### 2. Endpoint FastAPI
 ```python
 from fastapi import FastAPI, Depends
@@ -141,6 +147,8 @@ def run_query(payload: QueryRequest, user=Depends(authenticate_user)):
     )
 ```
 
+**Descrição**: O endpoint `/v1/query` serve como porta de entrada REST para o app móvel. FastAPI inicializa o serviço, enquanto os modelos `BaseModel` (`QueryRequest` e `QueryResponse`) definem o esquema de entrada e saída. A função `authenticate_user` atua como _placeholder_ para a integração OAuth e é injetada com `Depends`. Ao receber uma requisição, o backend (ainda sem o refinamento real por LLM) chama `esearch` para obter PMIDs, monta o texto resumido fictício e devolve citações e metadados correspondentes, ilustrando o formato esperado da resposta JSON.
+
 ### 3. Prompt Base para o LLM Grok
 ```
 Você é um assistente para profissionais de saúde. Use apenas informações confirmadas por artigos do PubMed fornecidos. Para cada resposta:
@@ -149,6 +157,8 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 - Inclua um aviso: "Esta resposta não substitui o julgamento clínico."
 - Se não houver evidência suficiente, informe claramente.
 ```
+
+**Descrição**: O _prompt_ define a postura do LLM Grok: responder somente com evidências comprovadas, citar PMIDs em cada orientação e manter o aviso clínico obrigatório. Também instrui o modelo a registrar lacunas de evidência, garantindo transparência com o usuário.
 
 ## Considerações de Conformidade e Ética
 - **Disclaimers obrigatórios** em todas as telas e respostas.

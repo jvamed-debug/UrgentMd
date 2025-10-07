@@ -55,9 +55,10 @@ A solução é composta por três camadas:
 1. **Entrada de consulta**: Profissional envia pergunta em linguagem natural via app.
 2. **Refinamento de termos**: Backend chama o LLM para sugerir termos MeSH e filtros.
 3. **Busca estruturada**: Serviço consulta ESearch para PMIDs relevantes, seguido de ESummary/EFetch para metadados e abstracts.
-4. **Síntese**: LLM gera resumo com pontos-chave, nível de evidência, recomendações e citações numeradas.
-5. **Resposta ao app**: JSON contendo texto sintetizado, lista de artigos, links e metadados.
-6. **Feedback e iteração**: Usuário pode refinar consulta, favoritar resultados e exportar.
+ 4. **Síntese**: LLM gera resumo com pontos-chave, nível de evidência, recomendações e citações numeradas.
+ 5. **Resposta ao app**: JSON contendo texto sintetizado, lista de artigos, links e metadados.
+ 6. **Feedback e iteração**: Usuário pode refinar consulta, favoritar resultados e exportar.
+  7. **Escalonamento imediato quando necessário**: Sempre que a consulta indicar necessidade de apoio da equipe sênior (staff), o backend aciona o módulo de comunicação para enviar ao usuário o link direto de WhatsApp correspondente ao número institucional **+55 12 98894-0100**, facilitando o contato síncrono.
 
 ## Fluxograma Simplificado
 ```
@@ -154,6 +155,7 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 - **Gestão de consentimento** para armazenamento de dados de uso.
 - **Treinamento de usuários** sobre limitações da IA.
 - **Monitoramento contínuo** da qualidade das respostas e revisão por comitê clínico.
+- **Procedimento de escalonamento** documentado, garantindo que o link de WhatsApp (+55 12 98894-0100) seja exibido ou enviado automaticamente quando a solicitação exigir suporte do staff.
 
 ## Roadmap de Implementação
 1. **Fase 1 – MVP**

@@ -35,7 +35,7 @@ A solução é composta por três camadas:
      - Faz chamadas sequenciais à API E-Utilities (ESearch → ESummary → EFetch) respeitando limites de taxa.
      - Armazena logs e cache em banco relacional (PostgreSQL recomendado) ou Redis para resultados recentes.
   3. **Serviço de síntese de evidências**:
-     - Envia abstracts e metadados ao LLM Grok (xAI) para sumarização.
+     - Envia abstracts e metadados ao LLM da OpenAI (por exemplo, GPT-4 Turbo) para sumarização.
      - Aplica pós-processamento para incluir citações com PMID/DOI e destacar recomendações de nível de evidência.
   4. **Serviço de conformidade e auditoria**:
      - Registra ações relevantes (quem pesquisou, quando, com qual finalidade).
@@ -48,7 +48,7 @@ A solução é composta por três camadas:
 
 ### 3. Integrações Externas
 - **PubMed E-Utilities**: Uso de ESearch, ESummary e EFetch. Respeitar limite de 3 req/s sem chave ou até 10 req/s com chave obtida no NCBI.
-- **LLM Grok (xAI)**: Utilizar API para refinamento de consultas e sumarização. Configurar contextos com instruções fixas (system prompts) enfatizando evidências e disclaimers.
+- **LLM OpenAI**: Utilizar a API da OpenAI (por exemplo, `gpt-4o` ou modelos clínicos especializados disponíveis) para refinamento de consultas e sumarização. Configurar contextos com instruções fixas (system prompts) enfatizando evidências e disclaimers.
 - **Serviços de Monitoramento**: Stack de logs (ELK, Grafana + Loki) e alertas para falhas ou latência elevada.
 
 ## Fluxo de Funcionamento
@@ -149,7 +149,7 @@ def run_query(payload: QueryRequest, user=Depends(authenticate_user)):
 
 **Descrição**: O endpoint `/v1/query` serve como porta de entrada REST para o app móvel. FastAPI inicializa o serviço, enquanto os modelos `BaseModel` (`QueryRequest` e `QueryResponse`) definem o esquema de entrada e saída. A função `authenticate_user` atua como _placeholder_ para a integração OAuth e é injetada com `Depends`. Ao receber uma requisição, o backend (ainda sem o refinamento real por LLM) chama `esearch` para obter PMIDs, monta o texto resumido fictício e devolve citações e metadados correspondentes, ilustrando o formato esperado da resposta JSON.
 
-### 3. Prompt Base para o LLM Grok
+### 3. Prompt Base para o LLM da OpenAI
 ```
 Você é um assistente para profissionais de saúde. Use apenas informações confirmadas por artigos do PubMed fornecidos. Para cada resposta:
 - Liste recomendações com nível de evidência quando disponível.
@@ -158,7 +158,7 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 - Se não houver evidência suficiente, informe claramente.
 ```
 
-**Descrição**: O _prompt_ define a postura do LLM Grok: responder somente com evidências comprovadas, citar PMIDs em cada orientação e manter o aviso clínico obrigatório. Também instrui o modelo a registrar lacunas de evidência, garantindo transparência com o usuário.
+**Descrição**: O _prompt_ define a postura do LLM da OpenAI: responder somente com evidências comprovadas, citar PMIDs em cada orientação e manter o aviso clínico obrigatório. Também instrui o modelo a registrar lacunas de evidência, garantindo transparência com o usuário.
 
 ## Considerações de Conformidade e Ética
 - **Disclaimers obrigatórios** em todas as telas e respostas.
@@ -169,7 +169,7 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 
 ## Roadmap de Implementação
 1. **Fase 1 – MVP**
-   - Autenticação básica, consultas simples, integração ESearch + Grok para resumo curto.
+   - Autenticação básica, consultas simples, integração ESearch + OpenAI para resumo curto.
    - Logging essencial e dashboard mínimo.
 2. **Fase 2 – Expansão**
    - Filtros avançados (tipo de estudo, faixa etária, idioma).
@@ -196,7 +196,7 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
    - Definir quais dados podem ou não sair do ambiente hospitalar antes de envolver o LLM.
 3. **Provisionar ambiente de desenvolvimento seguro**
    - Configurar repositório Git privado, pipelines de CI/CD e gestão de segredos (por exemplo, HashiCorp Vault).
-   - Criar variáveis de ambiente para chaves do NCBI e da API da xAI.
+   - Criar variáveis de ambiente para chaves do NCBI e da API da OpenAI.
 
 ### Sprint 1 (Protótipo Técnico)
 1. **Implementar esqueleto do backend**

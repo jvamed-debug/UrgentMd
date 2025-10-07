@@ -26,7 +26,7 @@ A solução é composta por três camadas:
   - Fornecer modo offline limitado (exibição de histórico armazenado localmente).
 
 ### 2. Backend (Serviços e Integrações)
-- **Framework sugerido**: FastAPI (Python 3.10+) por oferecer desempenho e tipagem forte.
+- **Framework sugerido**: FastAPI (Python 3.13+) por oferecer desempenho e tipagem forte.
 - **Principais serviços**:
   1. **Serviço de autenticação**: Integra-se a provedor OAuth externo (hospital, Microsoft Entra ID, etc.).
   2. **Serviço de orquestração de consultas**:

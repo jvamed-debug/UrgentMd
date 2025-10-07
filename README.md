@@ -3,11 +3,11 @@ Assistente de apoio à decisão clínica para médicos em Emergência e UTI, for
 
 ## Backend de Referência (FastAPI)
 
-O diretório `app/` contém uma implementação inicial do backend responsável por consultar o PubMed e sintetizar evidências com modelos da OpenAI. Para executar localmente:
+O diretório `app/` contém uma implementação inicial do backend responsável por consultar o PubMed e sintetizar evidências com modelos da OpenAI. Para executar localmente (utilizando **Python 3.13**):
 
 1. Crie um ambiente virtual e instale dependências:
    ```bash
-   python -m venv .venv
+   python3.13 -m venv .venv
    source .venv/bin/activate
    pip install -r requirements.txt
    ```

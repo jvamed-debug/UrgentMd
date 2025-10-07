@@ -174,10 +174,35 @@ Você é um assistente para profissionais de saúde. Use apenas informações co
 - Zero incidentes de violação de dados ou uso indevido.
 
 ## Próximos Passos
-- Definir equipe multidisciplinar (TI, compliance, corpo clínico).
-- Validar requisitos com stakeholders hospitalares.
-- Preparar documentação para comitês de ética e privacidade.
-- Iniciar protótipo integrando FastAPI, E-Utilities e um LLM de teste.
+
+### Sprint 0 (Planejamento e Preparação)
+1. **Formar o squad multidisciplinar**
+   - Responsáveis: liderança médica, TI hospitalar.
+   - Entregáveis: matriz RACI, canais de comunicação e calendário de rituais.
+2. **Mapear requisitos regulatórios**
+   - Levantar políticas internas (LGPD, HIPAA equivalente) e restrições de uso de IA.
+   - Definir quais dados podem ou não sair do ambiente hospitalar antes de envolver o LLM.
+3. **Provisionar ambiente de desenvolvimento seguro**
+   - Configurar repositório Git privado, pipelines de CI/CD e gestão de segredos (por exemplo, HashiCorp Vault).
+   - Criar variáveis de ambiente para chaves do NCBI e da API da xAI.
+
+### Sprint 1 (Protótipo Técnico)
+1. **Implementar esqueleto do backend**
+   - Criar projeto FastAPI com endpoints `/health` e `/v1/query`.
+   - Adicionar autenticação simulada (mock) e testes automatizados básicos.
+2. **Conectar ao PubMed**
+   - Desenvolver módulo de cliente para ESearch/ESummary com tratamento de erros e limites de taxa.
+   - Registrar logs estruturados com PMIDs retornados.
+3. **Integrar LLM de teste**
+   - Usar chave de sandbox (quando disponível) para validar prompt base e formato de resposta.
+   - Incluir placeholder de citação e aviso clínico no payload de retorno.
+
+### Sprint 2 (Validação com Usuários)
+1. **Testes de usabilidade com 3–5 profissionais** para validar jornada no app (wireframes ou protótipo navegável).
+2. **Revisão clínica das respostas**: comparar saídas do protótipo com guidelines vigentes e ajustar prompts.
+3. **Planejar integração com sistemas hospitalares**: definir APIs FHIR/HL7 necessárias e segurança de rede.
+
+> **Dica rápida**: após cada sprint, conduza retrospectiva com foco em riscos clínicos identificados e ajustes de conformidade.
 
 ---
 **Aviso**: PubMedMedAI destina-se a profissionais habilitados. As respostas oferecidas não substituem diagnóstico, tratamento ou acompanhamento médico. Sempre consulte protocolos institucionais e utilize julgamento clínico especializado.

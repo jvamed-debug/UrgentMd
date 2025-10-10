@@ -9,7 +9,15 @@ from .llm import EvidenceSummarizer
 from .pubmed_client import PubMedClient
 from .schemas import ArticleSummary, QueryRequest, QueryResponse
 
-STAFF_KEYWORDS = {"parada", "instável", "emergência", "choque", "intubação"}
+STAFF_KEYWORDS = {
+    "parada",
+    "instável",
+    "emergência",
+    "choque",
+    "intubação",
+    "chefe de plantão",
+    "chefe de plantao",
+}
 
 
 @dataclass(slots=True)

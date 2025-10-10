@@ -63,3 +63,18 @@ def test_orchestrator_builds_citations_list():
     )
     response = orchestrator.run(QueryRequest(question="asthma"))
     assert response.citations == ["PMID:123", "PMID:456"]
+
+
+def test_orchestrator_escalates_for_shift_lead_keyword():
+    orchestrator = QueryOrchestrator(
+        pubmed=_StubPubMedClient(pmids=[], summaries=[]),
+        summarizer=_StubSummarizer(text=""),
+        settings=Settings(
+            ncbi_api_key=None,
+            openai_api_key=None,
+            openai_model="gpt-4o-mini",
+            staff_whatsapp_link="https://wa.me/5512988940100",
+        ),
+    )
+    response = orchestrator.run(QueryRequest(question="Chefe de plantão foi acionado"))
+    assert response.staff_contact == "https://wa.me/5512988940100"
